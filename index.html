@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RappiPlus Analytics · Proyecto Final · Sebastián Amaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Mulish:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rappi:#FF441F;--rappi2:#FF6B47;--rappi3:#FF8C73;
+  --rappi-dim:rgba(255,68,31,0.12);--rappi-border:rgba(255,68,31,0.3);
+  --bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--bg4:#252525;
+  --text:#f5f5f5;--text2:#a0a0a0;--text3:#606060;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.12);
+  --yellow:#F2C811;--yellow-dim:rgba(242,200,17,0.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Mulish',sans-serif;font-weight:400;line-height:1.7;overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(255,68,31,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,68,31,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(15,15,15,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 40px;justify-content:space-between}
+@media(max-width:640px){nav{padding:0 20px}}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.08em;color:var(--text);display:flex;align-items:center;gap:6px}
+.nav-logo span{color:var(--rappi)}
+.nav-links{display:flex;gap:6px}
+.nav-links a{padding:6px 14px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;transition:all 0.15s}
+.nl-primary{background:var(--rappi);color:#fff}
+.nl-primary:hover{background:var(--rappi2)!important}
+.nl-ghost{color:var(--text2);border:1px solid var(--border2)}
+.nl-ghost:hover{color:var(--text)!important}
+@media(max-width:500px){.nl-ghost{display:none}}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 80px;z-index:1;overflow:hidden}
+@media(max-width:640px){.hero{padding:80px 20px 60px}}
+.hero-glow{position:absolute;top:-200px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(255,68,31,0.15) 0%,transparent 60%);pointer-events:none;animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--rappi-dim);border:1px solid var(--rappi-border);border-radius:100px;padding:6px 16px;margin-bottom:32px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--rappi2)}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--rappi);animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(64px,10vw,140px);line-height:0.9;letter-spacing:0.02em;margin-bottom:8px;color:var(--text)}
+h1 .orange{color:var(--rappi)}
+.hero-sub{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,34px);letter-spacing:0.08em;color:var(--text3);margin-bottom:28px}
+.hero-desc{font-size:16px;color:var(--text2);max-width:580px;margin-bottom:44px;font-weight:300;line-height:1.7}
+.hero-desc strong{color:var(--text);font-weight:600}
+.hero-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:52px}
+.tbtn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;transition:all 0.15s}
+.tbtn:hover{transform:translateY(-2px)}
+.tbtn-pbi{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(242,200,17,0.25)}
+.tbtn-colab{background:rgba(249,171,0,0.1);color:#F9AB00;border:1px solid rgba(249,171,0,0.2)}
+.tbtn-gh{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+@media(max-width:780px){.kpi-strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
+.kpi-cell{background:var(--bg2);padding:20px 20px 16px}
+.kv{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,32px);letter-spacing:0.04em;color:var(--rappi);line-height:1;margin-bottom:4px}
+.kv.w{color:var(--text)}
+.kl{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.section{max-width:1100px;margin:0 auto;padding:88px 40px;position:relative;z-index:1}
+@media(max-width:640px){.section{padding:64px 20px}}
+.sec-label{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--rappi);flex-shrink:0}
+.sec-label span{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--rappi)}
+h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,62px);letter-spacing:0.04em;line-height:1;color:var(--text);margin-bottom:44px}
+h2 em{color:var(--rappi);font-style:normal}
+.full-div{border:none;border-top:1px solid var(--border);position:relative;z-index:1}
+.funnel-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.fstep{display:grid;grid-template-columns:180px 1fr auto;gap:20px;align-items:center;padding:20px 28px;border-bottom:1px solid var(--border);transition:background 0.15s}
+.fstep:last-child{border-bottom:none}
+.fstep:hover{background:var(--bg3)}
+@media(max-width:560px){.fstep{grid-template-columns:1fr auto;gap:10px}}
+.fevent{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text2);letter-spacing:0.04em}
+.fbar-w{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.fbar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--rappi),var(--rappi2))}
+.fpct-col{text-align:right;min-width:80px}
+.fpct-main{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.04em;color:var(--text);line-height:1}
+.fpct-drop{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rappi);font-weight:700}
+.fpct-drop.good{color:var(--green)}
+.scpr-grid{display:flex;flex-direction:column;gap:2px;background:var(--border);border-radius:8px;overflow:hidden}
+.scpr-card{background:var(--bg2);padding:40px 44px;display:grid;grid-template-columns:260px 1fr;gap:44px;align-items:start;transition:background 0.15s}
+.scpr-card:hover{background:var(--bg3)}
+@media(max-width:760px){.scpr-card{grid-template-columns:1fr;gap:24px;padding:28px 24px}}
+.scpr-num{font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:0.02em;line-height:0.85;color:rgba(255,68,31,0.08);margin-bottom:14px}
+.scpr-icon{font-size:28px;margin-bottom:10px;display:block}
+.scpr-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.06em;color:var(--text);margin-bottom:4px;line-height:1.1}
+.scpr-sub{font-size:11px;color:var(--rappi);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.scpr-blocks{display:flex;flex-direction:column;gap:14px}
+.sb{padding:14px 16px;border-radius:6px;border-left:3px solid}
+.sb.s{background:rgba(255,255,255,0.03);border-color:var(--text3)}
+.sb.c{background:rgba(255,68,31,0.06);border-color:var(--rappi)}
+.sb.p{background:rgba(255,255,255,0.03);border-color:var(--text3)}
+.sb.r{background:rgba(34,197,94,0.06);border-color:var(--green)}
+.sb-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px}
+.sb.s .sb-label{color:var(--text3)}.sb.c .sb-label{color:var(--rappi)}.sb.p .sb-label{color:var(--text3)}.sb.r .sb-label{color:var(--green)}
+.sb p{font-size:13px;color:var(--text2);line-height:1.65;font-weight:300}
+.sb p strong{color:var(--text);font-weight:600}
+.code-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.code-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:7px}
+.cdot{width:10px;height:10px;border-radius:50%}
+.code-fn{margin-left:10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:0.08em}
+.code-body{padding:24px 28px;overflow-x:auto}
+pre{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:#a8d8b8;white-space:pre}
+.kw{color:#ff8c73}.fn{color:#7ec8e3}.cm{color:#4a4a4a}.st{color:#f0c070}.nm{color:#b0e0a8}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;background:var(--border);border-radius:8px;overflow:hidden}
+.tc{background:var(--bg2);padding:26px 22px;transition:background 0.15s}
+.tc:hover{background:var(--bg3)}
+.tc-icon{font-size:22px;margin-bottom:10px;display:block}
+.tc-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:0.06em;color:var(--text);margin-bottom:4px}
+.tc-use{font-size:12px;color:var(--text3);font-weight:300;line-height:1.5}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.ds-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:18px 20px;transition:border-color 0.15s}
+.ds-card:hover{border-color:var(--border2)}
+.ds-name{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--rappi2);margin-bottom:4px}
+.ds-rows{font-size:20px;font-family:'Bebas Neue',sans-serif;letter-spacing:0.04em;color:var(--text);margin-bottom:2px}
+.ds-desc{font-size:11px;color:var(--text3);font-weight:300}
+.footer{background:var(--bg2);border-top:1px solid var(--border);position:relative;z-index:1}
+.footer-inner{max-width:1100px;margin:0 auto;padding:72px 40px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+@media(max-width:640px){.footer-inner{grid-template-columns:1fr;padding:48px 20px}}
+.footer-t{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,4vw,50px);letter-spacing:0.04em;line-height:1;color:var(--text);margin-bottom:8px}
+.footer-t span{color:var(--rappi)}
+.footer-s{font-size:13px;color:var(--text3);font-weight:300}
+.footer-btns{display:flex;gap:10px;flex-wrap:wrap}
+.footer-copy{max-width:1100px;margin:0 auto;padding:20px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:0.06em}
+@media(max-width:640px){.footer-copy{padding:20px}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<nav>
+  <div class="nav-logo">RAPPI<span>+</span> ANALYTICS</div>
+  <div class="nav-links">
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYzRkZDVlNjAtMGFiYS00MTM5LTlhNjItMTUzYTA3YzE2OWEyIiwidCI6ImY5NGJmNGQ5LTgwOTctNDc5NC1hZGY2LWE1NDY2Y2EyODU2MyIsImMiOjR9" target="_blank" class="nl-primary">Power BI</a>
+    <a href="https://colab.research.google.com/drive/1CqJnSo9DDa2bSrFENp9n3nbYllumZdVj?usp=sharing" target="_blank" class="nl-ghost">Colab</a>
+    <a href="https://github.com/SebastianEEAmayaQuiroz" target="_blank" class="nl-ghost">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><div class="bdot"></div>Proyecto Final · Bootcamp TripleTen · 2025–2026</div>
+    <h1><span class="orange">RAPPI</span>PLUS<br>ANALYTICS</h1>
+    <div class="hero-sub">De datos a decisiones de negocio</div>
+    <p class="hero-desc">Análisis integral de una plataforma de e-commerce: <strong>rentabilidad</strong>, <strong>funnel SQL</strong>, <strong>cohortes</strong> y <strong>test A/B</strong> — con narrativa SCPR por hallazgo.</p>
+    <div class="hero-tools">
+      <a href="https://app.powerbi.com/view?r=eyJrIjoiYzRkZDVlNjAtMGFiYS00MTM5LTlhNjItMTUzYTA3YzE2OWEyIiwidCI6ImY5NGJmNGQ5LTgwOTctNDc5NC1hZGY2LWE1NDY2Y2EyODU2MyIsImMiOjR9" target="_blank" class="tbtn tbtn-pbi">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v7H3zm4-7h2v14H7zm4 4h2v10h-2zm4-4h2v14h-2zm4 7h2v7h-2z"/></svg>
+        Power BI Dashboard
+      </a>
+      <a href="https://colab.research.google.com/drive/1CqJnSo9DDa2bSrFENp9n3nbYllumZdVj?usp=sharing" target="_blank" class="tbtn tbtn-colab">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        Google Colab
+      </a>
+      <a href="https://github.com/SebastianEEAmayaQuiroz" target="_blank" class="tbtn tbtn-gh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi-cell"><div class="kv">$51.9M</div><div class="kl">Revenue total</div></div>
+      <div class="kpi-cell"><div class="kv w">24,916</div><div class="kl">Pedidos</div></div>
+      <div class="kpi-cell"><div class="kv">$2,085</div><div class="kl">Ticket promedio</div></div>
+      <div class="kpi-cell"><div class="kv w">3</div><div class="kl">Países activos</div></div>
+      <div class="kpi-cell"><div class="kv w">5</div><div class="kl">Pasos análisis</div></div>
+    </div>
+  </div>
+</header>
+
+<hr class="full-div">
+
+<!-- FUNNEL -->
+<div class="section">
+  <div class="sec-label"><div class="sdot"></div><span>Paso 3 · SQL · Funnel de conversión</span></div>
+  <h2>DÓNDE SE PIERDEN<br><em>LOS USUARIOS</em></h2>
+  <div class="funnel-wrap">
+    <div class="fstep"><div class="fevent">first_visit</div><div class="fbar-w"><div class="fbar" style="width:100%"></div></div><div class="fpct-col"><div class="fpct-main">100%</div><div class="fpct-drop good">Base del funnel</div></div></div>
+    <div class="fstep"><div class="fevent">product_view</div><div class="fbar-w"><div class="fbar" style="width:78%"></div></div><div class="fpct-col"><div class="fpct-main">78%</div><div class="fpct-drop">−22% vs inicio</div></div></div>
+    <div class="fstep"><div class="fevent">add_to_cart</div><div class="fbar-w"><div class="fbar" style="width:52%"></div></div><div class="fpct-col"><div class="fpct-main">52%</div><div class="fpct-drop">−26pp drop</div></div></div>
+    <div class="fstep" style="background:rgba(255,68,31,0.04)"><div class="fevent" style="color:var(--rappi)">begin_checkout ⚠</div><div class="fbar-w"><div class="fbar" style="width:31%"></div></div><div class="fpct-col"><div class="fpct-main" style="color:var(--rappi)">31%</div><div class="fpct-drop">Mayor drop-off</div></div></div>
+    <div class="fstep"><div class="fevent">purchase</div><div class="fbar-w"><div class="fbar" style="width:18%"></div></div><div class="fpct-col"><div class="fpct-main">~18%</div><div class="fpct-drop">Conversión final</div></div></div>
+  </div>
+  <p style="margin-top:12px;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">* Valores representativos. Ver datos exactos en Power BI o Colab.</p>
+</div>
+
+<hr class="full-div">
+
+<!-- SCPR -->
+<div class="section">
+  <div class="sec-label"><div class="sdot"></div><span>Narrativa ejecutiva · Modelo SCPR</span></div>
+  <h2>4 HALLAZGOS,<br><em>4 RESPUESTAS</em></h2>
+  <div class="scpr-grid">
+
+    <div class="scpr-card">
+      <div><div class="scpr-num">01</div><span class="scpr-icon">💰</span><div class="scpr-title">Rentabilidad del negocio</div><div class="scpr-sub">Python · Pandas · KPIs</div></div>
+      <div class="scpr-blocks">
+        <div class="sb s"><div class="sb-label">S — Situación</div><p>RappiPlus generó <strong>$51.9M en revenue</strong> con 24,916 pedidos distribuidos equitativamente entre México, Colombia y Argentina. Hogar, Moda y Electrónica tienen volúmenes muy similares.</p></div>
+        <div class="sb c"><div class="sb-label">C — Complicación</div><p>El gasto en marketing alcanzó <strong>$2.87M</strong>. Sin cruzar revenue con el costo real del catálogo, no es posible confirmar si el negocio opera con profit positivo o en pérdida.</p></div>
+        <div class="sb p"><div class="sb-label">P — Pregunta</div><p>¿El negocio genera profit positivo después de descontar costos de producto y gasto en marketing?</p></div>
+        <div class="sb r"><div class="sb-label">R — Respuesta</div><p>El análisis confirma que el negocio es <strong>rentable</strong>. El canal <strong>Organic</strong> es el más eficiente al no generar costo de adquisición directo. El merge con el catálogo revela el profit real por línea de pedido.</p></div>
+      </div>
+    </div>
+
+    <div class="scpr-card">
+      <div><div class="scpr-num">02</div><span class="scpr-icon">🛒</span><div class="scpr-title">Funnel de conversión</div><div class="scpr-sub">SQL · PostgreSQL · Window Functions</div></div>
+      <div class="scpr-blocks">
+        <div class="sb s"><div class="sb-label">S — Situación</div><p>El flujo tiene 5 etapas: <strong>first_visit → product_view → add_to_cart → begin_checkout → purchase</strong>. Se mide cuántos usuarios únicos llegan a cada paso.</p></div>
+        <div class="sb c"><div class="sb-label">C — Complicación</div><p>El mayor drop-off ocurre entre <strong>add_to_cart y begin_checkout</strong>. El usuario ya mostró intención al agregar al carrito, pero abandona antes de iniciar el pago — la mayor fricción está ahí.</p></div>
+        <div class="sb p"><div class="sb-label">P — Pregunta</div><p>¿En qué etapa exacta se pierde la mayor cantidad de usuarios y cuál es la tasa de conversión final?</p></div>
+        <div class="sb r"><div class="sb-label">R — Respuesta</div><p>Las funciones <strong>FIRST_VALUE</strong> y <strong>LAG</strong> cuantifican cada drop-off. El punto add_to_cart → begin_checkout es la prioridad máxima de intervención de UX para mejorar la conversión global.</p></div>
+      </div>
+    </div>
+
+    <div class="scpr-card">
+      <div><div class="scpr-num">03</div><span class="scpr-icon">🔁</span><div class="scpr-title">Retención por cohortes</div><div class="scpr-sub">SQL · CTEs · Análisis temporal</div></div>
+      <div class="scpr-blocks">
+        <div class="sb s"><div class="sb-label">S — Situación</div><p>Usuarios agrupados por <strong>mes de registro</strong>. Se mide cuántos permanecen activos en las <strong>semanas 1, 2 y 3</strong> posteriores a su alta en la plataforma.</p></div>
+        <div class="sb c"><div class="sb-label">C — Complicación</div><p>La retención cae semana a semana en toda plataforma de e-commerce. Sin medición por cohorte, es imposible saber si el negocio mejora o empeora su capacidad de retener usuarios con el tiempo.</p></div>
+        <div class="sb p"><div class="sb-label">P — Pregunta</div><p>¿Qué cohortes tienen mayor retención y en qué semana se produce el mayor abandono post-registro?</p></div>
+        <div class="sb r"><div class="sb-label">R — Respuesta</div><p>La consulta con <strong>CTEs</strong> calcula semana_1, semana_2 y semana_3 como % del total de la cohorte. Identifica qué mes de adquisición generó los usuarios más fieles y cuándo ocurre el abandono crítico.</p></div>
+      </div>
+    </div>
+
+    <div class="scpr-card">
+      <div><div class="scpr-num">04</div><span class="scpr-icon">🧪</span><div class="scpr-title">Test A/B checkout</div><div class="scpr-sub">Python · SciPy · T-test · α=0.05</div></div>
+      <div class="scpr-blocks">
+        <div class="sb s"><div class="sb-label">S — Situación</div><p>Experimento con <strong>nueva UI en el checkout</strong>. H₀: la tasa de conversión del grupo tratamiento es igual al control. H₁: la nueva UI genera una diferencia significativa.</p></div>
+        <div class="sb c"><div class="sb-label">C — Complicación</div><p>El grupo de tratamiento mostró una diferencia vs. el control. Sin un test formal es imposible saber si esa diferencia es real o producto del azar — no se puede tomar una decisión sin evidencia estadística.</p></div>
+        <div class="sb p"><div class="sb-label">P — Pregunta</div><p>¿El cambio en la UI del checkout tiene un impacto estadísticamente significativo en la tasa de conversión de compra?</p></div>
+        <div class="sb r"><div class="sb-label">R — Respuesta</div><p><strong>p-valor &gt; 0.05 → No se rechaza H₀.</strong> La diferencia no es estadísticamente significativa. Se recomienda continuar el experimento con mayor volumen de datos o explorar otros cambios en el flujo de compra.</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="full-div">
+
+<!-- SQL CODE -->
+<div class="section">
+  <div class="sec-label"><div class="sdot"></div><span>Código · SQL avanzado</span></div>
+  <h2>CONSULTAS QUE<br><em>RESPONDEN PREGUNTAS</em></h2>
+  <div class="code-wrap">
+    <div class="code-bar">
+      <div class="cdot" style="background:#ff5f57"></div>
+      <div class="cdot" style="background:#febc2e"></div>
+      <div class="cdot" style="background:#28c840"></div>
+      <span class="code-fn">rappiplus_consultas_SQL.sql · Funnel + Cohortes</span>
+    </div>
+    <div class="code-body">
+<pre><span class="cm">-- FUNNEL: conversión paso a paso con funciones de ventana</span>
+<span class="kw">WITH</span> funnel <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> nombre_evento,
+           <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> id_usuario) <span class="kw">AS</span> usuarios_unicos
+    <span class="kw">FROM</span>   events  <span class="kw">GROUP BY</span> nombre_evento
+),
+ordered_funnel <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> nombre_evento, usuarios_unicos,
+           <span class="kw">CASE</span> nombre_evento
+               <span class="kw">WHEN</span> <span class="st">'first_visit'</span>    <span class="kw">THEN</span> <span class="nm">1</span>
+               <span class="kw">WHEN</span> <span class="st">'product_view'</span>   <span class="kw">THEN</span> <span class="nm">2</span>
+               <span class="kw">WHEN</span> <span class="st">'add_to_cart'</span>    <span class="kw">THEN</span> <span class="nm">3</span>
+               <span class="kw">WHEN</span> <span class="st">'begin_checkout'</span> <span class="kw">THEN</span> <span class="nm">4</span>
+               <span class="kw">WHEN</span> <span class="st">'purchase'</span>       <span class="kw">THEN</span> <span class="nm">5</span>
+           <span class="kw">END AS</span> orden_funnel
+    <span class="kw">FROM</span> funnel
+)
+<span class="kw">SELECT</span> nombre_evento, usuarios_unicos,
+    <span class="fn">ROUND</span>(<span class="nm">100.0</span> * usuarios_unicos / <span class="fn">FIRST_VALUE</span>(usuarios_unicos)
+        <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> orden_funnel), <span class="nm">2</span>) <span class="kw">AS</span> conversion_vs_inicio_pct,
+    <span class="fn">ROUND</span>(<span class="nm">100.0</span> * usuarios_unicos / <span class="fn">LAG</span>(usuarios_unicos)
+        <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> orden_funnel), <span class="nm">2</span>) <span class="kw">AS</span> conversion_paso_anterior_pct
+<span class="kw">FROM</span> ordered_funnel <span class="kw">WHERE</span> orden_funnel &lt; <span class="nm">99</span> <span class="kw">ORDER BY</span> orden_funnel;
+
+<span class="cm">-- COHORTES: retención semanal W1 / W2 / W3 con CTEs</span>
+<span class="kw">WITH</span> cohortes <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> u.id_usuario,
+           <span class="fn">TO_CHAR</span>(<span class="fn">CAST</span>(u.fecha_registro <span class="kw">AS DATE</span>), <span class="st">'YYYY-MM'</span>) <span class="kw">AS</span> cohorte,
+           ua.dias_despues_registro, ua.activo
+    <span class="kw">FROM</span> users u <span class="kw">LEFT JOIN</span> user_activity ua
+        <span class="kw">ON</span> u.id_usuario = ua.id_usuario
+)
+<span class="kw">SELECT</span> cohorte, total_usuarios,
+    <span class="fn">ROUND</span>(<span class="nm">100.0</span>*retenido_w1/<span class="fn">NULLIF</span>(total_usuarios,<span class="nm">0</span>),<span class="nm">1</span>) <span class="kw">AS</span> semana_1,
+    <span class="fn">ROUND</span>(<span class="nm">100.0</span>*retenido_w2/<span class="fn">NULLIF</span>(total_usuarios,<span class="nm">0</span>),<span class="nm">1</span>) <span class="kw">AS</span> semana_2,
+    <span class="fn">ROUND</span>(<span class="nm">100.0</span>*retenido_w3/<span class="fn">NULLIF</span>(total_usuarios,<span class="nm">0</span>),<span class="nm">1</span>) <span class="kw">AS</span> semana_3
+<span class="kw">FROM</span> resumen <span class="kw">ORDER BY</span> cohorte;</pre>
+    </div>
+  </div>
+</div>
+
+<hr class="full-div">
+
+<!-- TECH STACK -->
+<div class="section">
+  <div class="sec-label"><div class="sdot"></div><span>Stack técnico</span></div>
+  <h2>HERRAMIENTAS<br><em>UTILIZADAS</em></h2>
+  <div class="tech-grid">
+    <div class="tc"><span class="tc-icon">🐍</span><div class="tc-name">Python</div><div class="tc-use">Limpieza de datos, KPIs de rentabilidad, visualizaciones revenue y profit por categoría</div></div>
+    <div class="tc"><span class="tc-icon">🗄️</span><div class="tc-name">SQL</div><div class="tc-use">Funnel con window functions · Retención por cohortes con CTEs · PostgreSQL</div></div>
+    <div class="tc"><span class="tc-icon">🔗</span><div class="tc-name">SQLAlchemy</div><div class="tc-use">Conexión Python ↔ PostgreSQL. Queries ejecutadas directamente desde Colab</div></div>
+    <div class="tc"><span class="tc-icon">📊</span><div class="tc-name">Pandas</div><div class="tc-use">Manipulación de 24,916 pedidos. Merge con catálogo para cálculo de profit por línea</div></div>
+    <div class="tc"><span class="tc-icon">🧪</span><div class="tc-name">SciPy</div><div class="tc-use">T-test de dos muestras independientes para el test A/B del checkout · α = 0.05</div></div>
+    <div class="tc"><span class="tc-icon">📈</span><div class="tc-name">Power BI</div><div class="tc-use">Dashboard ejecutivo: Overview rentabilidad + Detalle drill-through por producto</div></div>
+  </div>
+</div>
+
+<hr class="full-div">
+
+<!-- DATASETS -->
+<div class="section">
+  <div class="sec-label"><div class="sdot"></div><span>Fuentes de datos</span></div>
+  <h2>7 DATASETS,<br><em>UNA HISTORIA</em></h2>
+  <div class="ds-grid">
+    <div class="ds-card"><div class="ds-name">orders_clean</div><div class="ds-rows">24,916</div><div class="ds-desc">Pedidos limpios · revenue, descuentos, dispositivo, fuente</div></div>
+    <div class="ds-card"><div class="ds-name">catalog_clean</div><div class="ds-rows">8</div><div class="ds-desc">Productos con costo unitario · base para calcular profit real</div></div>
+    <div class="ds-card"><div class="ds-name">marketing_clean</div><div class="ds-rows">1,621</div><div class="ds-desc">Gasto por canal y país · Organic, Social, Paid Search</div></div>
+    <div class="ds-card"><div class="ds-name">events (SQL)</div><div class="ds-rows">—</div><div class="ds-desc">Eventos de usuario · 5 etapas del funnel de conversión</div></div>
+    <div class="ds-card"><div class="ds-name">users (SQL)</div><div class="ds-rows">—</div><div class="ds-desc">Registro con fecha de alta · base para análisis de cohortes</div></div>
+    <div class="ds-card"><div class="ds-name">user_activity (SQL)</div><div class="ds-rows">—</div><div class="ds-desc">Actividad semanal post-registro · W1, W2, W3</div></div>
+    <div class="ds-card"><div class="ds-name">experiment_checkout</div><div class="ds-rows">—</div><div class="ds-desc">Resultados del test A/B · control vs tratamiento</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-t">VER EL ANÁLISIS<br><span>COMPLETO</span></div>
+      <div class="footer-s">Power BI y notebook disponibles</div>
+    </div>
+    <div class="footer-btns">
+      <a href="https://app.powerbi.com/view?r=eyJrIjoiYzRkZDVlNjAtMGFiYS00MTM5LTlhNjItMTUzYTA3YzE2OWEyIiwidCI6ImY5NGJmNGQ5LTgwOTctNDc5NC1hZGY2LWE1NDY2Y2EyODU2MyIsImMiOjR9" target="_blank" class="tbtn tbtn-pbi">Power BI</a>
+      <a href="https://colab.research.google.com/drive/1CqJnSo9DDa2bSrFENp9n3nbYllumZdVj?usp=sharing" target="_blank" class="tbtn tbtn-colab">Colab</a>
+      <a href="https://www.linkedin.com/in/sebastianamayada" target="_blank" class="tbtn tbtn-gh">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>Sebastián Amaya · Analista de Datos · TripleTen 2025–2026</span>
+    <span>RappiPlus Analytics · Proyecto Final</span>
+  </div>
+</footer>
+</body>
+</html>
